@@ -127,3 +127,65 @@ body {
 .settings-form button:hover {
   background-color: #00CCCC; /* Darker cyan on hover */
 }
+
+/* Daily Goal Circle */
+.daily-goal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.circle {
+  position: relative;
+  width: 100px;
+  height: 100px;
+}
+
+.circle svg {
+  transform: rotate(-90deg);
+}
+
+.progress-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+/* Time-of-Day Bar */
+.time-bar {
+  margin-top: 30px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.time-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: #888;
+}
+
+.bar {
+  height: 20px;
+  background-color: #2E2E2E;
+  border-radius: 10px;
+  margin-top: 5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.bar .study {
+  background-color: #00FFFF; /* Cyan for study */
+  height: 100%;
+  position: absolute;
+}
+
+.bar .break {
+  background-color: #FF0000; /* Red for breaks */
+  height: 100%;
+  position: absolute;
+}

@@ -37,40 +37,34 @@ function updateTimeDisplay() {
   timeDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 
+let startTime;
+let elapsedTime = 0;
+
 function startTimer() {
   if (!isRunning) {
     isRunning = true;
     pauseResumeButton.textContent = 'Pause';
-    timer = setInterval(() => {
-      if (timeLeft > 0) {
-        timeLeft--;
-        updateTimeDisplay();
-      } else {
-        clearInterval(timer);
-        isRunning = false;
-        if (isFocusTime) {
-          sessionCount++;
-          totalSessionTime += parseInt(sessionTimeInput.value);
-          sessionCountDisplay.textContent = sessionCount;
-          totalSessionTimeDisplay.textContent = totalSessionTime;
-          if (sessionCount % parseInt(sessionsBeforeLongBreakInput.value) === 0) {
-            timeLeft = parseInt(longBreakTimeInput.value) * 60;
-          } else {
-            timeLeft = parseInt(shortBreakTimeInput.value) * 60;
-          }
-        } else {
-          breakCount++;
-          totalBreakTime += isFocusTime ? 0 : parseInt(shortBreakTimeInput.value);
-          breakCountDisplay.textContent = breakCount;
-          totalBreakTimeDisplay.textContent = totalBreakTime;
-          timeLeft = parseInt(sessionTimeInput.value) * 60;
-        }
-        isFocusTime = !isFocusTime;
-        updateTimeDisplay();
-        pauseResumeButton.textContent = 'Resume';
-      }
-    }, 1000);
+    startTime = Date.now() - elapsedTime;
+    requestAnimationFrame(updateTimer);
   }
+}
+
+function updateTimer() {
+  if (isRunning) {
+    elapsedTime = Date.now() - startTime;
+    timeLeft = Math.max(0, initialTime - Math.floor(elapsedTime / 1000));
+    updateTimeDisplay();
+    if (timeLeft > 0) {
+      requestAnimationFrame(updateTimer);
+    } else {
+      clearTimer();
+    }
+  }
+}
+
+function clearTimer() {
+  isRunning = false;
+  pauseResumeButton.textContent = 'Resume';
 }
 
 function pauseTimer() {
@@ -95,3 +89,41 @@ saveSettingsButton.addEventListener('click', () => {
 
 // Initialize
 updateTimeDisplay();
+
+// Daily Goal
+let dailyGoal = 120; // Default daily goal in minutes
+let dailyProgress = 0;
+
+// Time-of-Day Bar
+const timeBar = document.querySelector('.time-bar .bar');
+
+// Update Daily Goal Progress
+function updateDailyGoalProgress() {
+  const progress = (dailyProgress / dailyGoal) * 100;
+  const progressCircle = document.getElementById('progress-circle');
+  const progressText = document.querySelector('.progress-text');
+  const offset = 283 - (283 * progress) / 100;
+  progressCircle.style.strokeDashoffset = offset;
+  progressText.textContent = `${Math.round(progress)}%`;
+}
+
+// Add Study/Break Block to Time Bar
+function addTimeBlock(startTime, endTime, type) {
+  const startPercent = (startTime / 1440) * 100; // Convert minutes to percentage
+  const endPercent = (endTime / 1440) * 100;
+  const block = document.createElement('div');
+  block.classList.add(type);
+  block.style.left = `${startPercent}%`;
+  block.style.width = `${endPercent - startPercent}%`;
+  timeBar.appendChild(block);
+}
+
+// Example Usage
+addTimeBlock(480, 510, 'study'); // 8:00 AM to 8:30 AM
+addTimeBlock(510, 515, 'break'); // 8:30 AM to 8:35 AM
+const dailyGoalInput = document.getElementById('daily-goal');
+
+saveSettingsButton.addEventListener('click', () => {
+  dailyGoal = parseInt(dailyGoalInput.value);
+  updateDailyGoalProgress();
+});
