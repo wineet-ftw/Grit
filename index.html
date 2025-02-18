@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pomodoro Timer</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Add FontAwesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <!-- Tabs Navigation -->
+  <div class="tabs">
+    <button id="timer-tab" class="active"><i class="fas fa-clock"></i></button>
+    <button id="analytics-tab"><i class="fas fa-chart-bar"></i></button>
+    <button id="settings-tab"><i class="fas fa-cog"></i></button>
+  </div>
+
+  <!-- Timer Tab -->
+  <div id="timer" class="tab-content active">
+    <div class="session">Session</div>
+    <div class="timer">24:59</div>
+    <div class="controls">
+      <button id="pause-resume">Resume</button>
+    </div>
+  </div>
+
+  <!-- Analytics Tab -->
+  <div id="analytics" class="tab-content">
+    <h2>Analytics</h2>
+    <div class="analytics-data">
+      <p>Session Count: <span id="session-count">0</span></p>
+      <p>Break Count: <span id="break-count">0</span></p>
+      <p>Total Session Time: <span id="total-session-time">0</span> minutes</p>
+      <p>Total Break Time: <span id="total-break-time">0</span> minutes</p>
+    </div>
+  </div>
+
+  <!-- Settings Tab -->
+  <div id="settings" class="tab-content">
+    <h2>Settings</h2>
+    <div class="settings-form">
+      <label for="session-time">Session Time (minutes):</label>
+      <input type="number" id="session-time" value="25" min="1">
+
+      <label for="short-break-time">Short Break Time (minutes):</label>
+      <input type="number" id="short-break-time" value="5" min="1">
+
+      <label for="long-break-time">Long Break Time (minutes):</label>
+      <input type="number" id="long-break-time" value="15" min="1">
+
+      <label for="sessions-before-long-break">Sessions Before Long Break:</label>
+      <input type="number" id="sessions-before-long-break" value="4" min="1">
+
+      <button id="save-settings">Save Settings</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
